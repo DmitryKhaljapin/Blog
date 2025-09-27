@@ -5,10 +5,13 @@ import {
 } from 'inversify';
 import { App } from './App';
 import { TYPES } from './types';
+import { ILogger } from './logger/logger.service';
+import { LoggerService } from './logger/logger.service.inteface';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
     options.bind<App>(TYPES.Application).to(App);
+    options.bind<ILogger>(TYPES.LoggerService).to(LoggerService);
   },
 );
 
