@@ -2,8 +2,10 @@ import { json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express, { Express } from 'express';
 import { Server } from 'http';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import cors from 'cors';
+import { ILogger } from './logger/logger.service';
+import { TYPES } from './types';
 
 @injectable()
 export class App {
@@ -11,7 +13,7 @@ export class App {
   server: Server;
   port: number;
 
-  constructor() {
+  constructor(@inject(TYPES.LoggerService) private logger: ILogger) {
     this.app = express();
     this.port = 3000; // use config servise here
   }
@@ -33,5 +35,7 @@ export class App {
     this.usePrismaService();
 
     this.server = this.app.listen(this.port);
+
+    this.logger.log(`The server has stated on the port ${this.port}`);
   }
 }
