@@ -7,6 +7,7 @@ import cors from 'cors';
 import { ILogger } from './logger/logger.service';
 import { TYPES } from './types';
 import { IConfigService } from './config/config.service.interface';
+import { IDatabaseService } from './database/database.service.interface';
 
 @injectable()
 export class App {
@@ -17,6 +18,7 @@ export class App {
   constructor(
     @inject(TYPES.LoggerService) private logger: ILogger,
     @inject(TYPES.ConfigService) private configService: IConfigService,
+    @inject(TYPES.PrismaService) private prismaService: IDatabaseService,
   ) {
     this.app = express();
     this.port = Number(this.configService.get('PORT'));
@@ -30,7 +32,9 @@ export class App {
 
   public useRoutes() {}
 
-  public async usePrismaService() {}
+  public async usePrismaService() {
+    await this.prismaService.connect();
+  }
 
   public async init() {
     this.useMiddleware();

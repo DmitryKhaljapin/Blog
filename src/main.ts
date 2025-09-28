@@ -11,6 +11,8 @@ import { IExeptionFilter } from './errors/exeption.filter.interface';
 import { ExeptionFilter } from './errors/exeption.filter';
 import { IConfigService } from './config/config.service.interface';
 import { ConfigService } from './config/config.service';
+import { IDatabaseService } from './database/database.service.interface';
+import { PrismaService } from './database/prisma.service';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
@@ -18,6 +20,10 @@ export const appBindings = new ContainerModule(
     options.bind<ILogger>(TYPES.LoggerService).to(LoggerService);
     options.bind<IExeptionFilter>(TYPES.ExeptionFilter).to(ExeptionFilter);
     options.bind<IConfigService>(TYPES.ConfigService).to(ConfigService);
+    options
+      .bind<IDatabaseService>(TYPES.PrismaService)
+      .to(PrismaService)
+      .inSingletonScope();
   },
 );
 
