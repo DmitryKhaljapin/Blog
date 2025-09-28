@@ -6,6 +6,7 @@ import { inject, injectable } from 'inversify';
 import cors from 'cors';
 import { ILogger } from './logger/logger.service';
 import { TYPES } from './types';
+import { IConfigService } from './config/config.service.interface';
 
 @injectable()
 export class App {
@@ -13,9 +14,12 @@ export class App {
   server: Server;
   port: number;
 
-  constructor(@inject(TYPES.LoggerService) private logger: ILogger) {
+  constructor(
+    @inject(TYPES.LoggerService) private logger: ILogger,
+    @inject(TYPES.ConfigService) private configService: IConfigService,
+  ) {
     this.app = express();
-    this.port = 3000; // use config servise here
+    this.port = Number(this.configService.get('PORT'));
   }
 
   public useMiddleware() {

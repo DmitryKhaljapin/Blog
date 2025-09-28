@@ -9,12 +9,15 @@ import { ILogger } from './logger/logger.service';
 import { LoggerService } from './logger/logger.service.inteface';
 import { IExeptionFilter } from './errors/exeption.filter.interface';
 import { ExeptionFilter } from './errors/exeption.filter';
+import { IConfigService } from './config/config.service.interface';
+import { ConfigService } from './config/config.service';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
     options.bind<App>(TYPES.Application).to(App);
     options.bind<ILogger>(TYPES.LoggerService).to(LoggerService);
     options.bind<IExeptionFilter>(TYPES.ExeptionFilter).to(ExeptionFilter);
+    options.bind<IConfigService>(TYPES.ConfigService).to(ConfigService);
   },
 );
 
