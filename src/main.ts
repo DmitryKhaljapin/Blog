@@ -15,6 +15,8 @@ import { IDatabaseService } from './database/database.service.interface';
 import { PrismaService } from './database/prisma.service';
 import { ITokenRepository } from './token/repository/token.repository.interface';
 import { TokenRepository } from './token/repository/token.repository';
+import { ITokenService } from './token/service/token.service.interface';
+import { TokenService } from './token/service/token.service';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
@@ -30,6 +32,7 @@ export const appBindings = new ContainerModule(
       .bind<ITokenRepository>(TYPES.TokenRepository)
       .to(TokenRepository)
       .inSingletonScope();
+    options.bind<ITokenService>(TYPES.TokenService).to(TokenService);
   },
 );
 
