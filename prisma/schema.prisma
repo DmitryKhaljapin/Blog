@@ -6,3 +6,10 @@ datasource db {
   provider = "postgres"
   url      = env("DB_URI")
 }
+
+
+model TokenModel {
+  id           Int        @id @default(autoincrement())
+  refreshToken String     @unique
+  userId       Int        @unique
+}
