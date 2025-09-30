@@ -7,9 +7,20 @@ datasource db {
   url      = env("DB_URI")
 }
 
+model UserModel {
+  id             Int          @id @default(autoincrement())
+  name String
+  email          String       @unique
+  password       String
+  isActivated    Boolean      @default(false)
+  activationLink String
+  TokenModel     TokenModel[]
+}
 
 model TokenModel {
   id           Int        @id @default(autoincrement())
   refreshToken String     @unique
   userId       Int        @unique
+  user         UserModel  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@index([userId])
 }
