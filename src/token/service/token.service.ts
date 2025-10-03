@@ -5,6 +5,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { IConfigService } from '../../config/config.service.interface';
 import { ITokenRepository } from '../repository/token.repository.interface';
+import { TokenModel } from '@prisma/client';
 
 injectable();
 export class TokenService implements ITokenService {
@@ -15,15 +16,21 @@ export class TokenService implements ITokenService {
 
   public generateTokens(payload: JwtPayload): ITokens {
     const accessToken = sign(
-      payload,
+      {
+        iat: Math.floor(Date.now() / 1000),
+        ...payload,
+      },
       this.configService.get('JWT_ACCESS_SECRET'),
-      { expiresIn: '15m' },
+      { algorithm: 'HS256', expiresIn: '15m' },
     );
 
     const refreshToken = sign(
-      payload,
+      {
+        iat: Math.floor(Date.now() / 1000),
+        ...payload,
+      },
       this.configService.get('JWT_REFRESH_SECRET'),
-      { expiresIn: '1d' },
+      { algorithm: 'HS256', expiresIn: '1d' },
     );
 
     return {
@@ -32,8 +39,23 @@ export class TokenService implements ITokenService {
     };
   }
 
+  public generateAccessToken(payload: JwtPayload): string {
+    const accessToken = sign(
+      {
+        iat: Math.floor(Date.now() / 1000),
+        ...payload,
+      },
+      this.configService.get('JWT_ACCESS_SECRET'),
+      { algorithm: 'HS256', expiresIn: '15m' },
+    );
+
+    return accessToken;
+  }
+
   public async saveToken(token: Token): Promise<boolean> {
-    const existingToken = await this.tokenRepository.findByRefreshToken(token);
+    const existingToken = await this.tokenRepository.findByRefreshToken(
+      token.refreshToken,
+    );
 
     if (existingToken) {
       await this.tokenRepository.update(token);
@@ -49,10 +71,17 @@ export class TokenService implements ITokenService {
   }
 
   public async isTokenExisting(token: Token): Promise<boolean> {
-    const existingToken = await this.tokenRepository.findByRefreshToken(token);
+    // remove
+    const existingToken = await this.tokenRepository.findByRefreshToken(
+      token.refreshToken,
+    );
 
     if (!existingToken) return false;
 
     return true;
+  }
+
+  public async findToken(refreshToken: string): Promise<TokenModel | null> {
+    return await this.tokenRepository.findByRefreshToken(refreshToken);
   }
 }
