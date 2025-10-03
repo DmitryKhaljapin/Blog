@@ -19,6 +19,11 @@ import { ITokenService } from './token/service/token.service.interface';
 import { TokenService } from './token/service/token.service';
 import { IMailService } from './mail/mail.service.interface';
 import { MailService } from './mail/mail.service';
+import { IUserRepository } from './user/repository/user.repository.interface';
+import { UserRegistrationDto } from './user/dto/user-registration.dto';
+import { UserRepository } from './user/repository/user.repository';
+import { IUserService } from './user/service/user.service.intarface';
+import { UserService } from './user/service/user.service';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
@@ -36,6 +41,11 @@ export const appBindings = new ContainerModule(
       .inSingletonScope();
     options.bind<ITokenService>(TYPES.TokenService).to(TokenService);
     options.bind<IMailService>(TYPES.MailService).to(MailService);
+    options
+      .bind<IUserRepository>(TYPES.UserRepository)
+      .to(UserRepository)
+      .inSingletonScope();
+    options.bind<IUserService>(TYPES.UserService).to(UserService);
   },
 );
 
