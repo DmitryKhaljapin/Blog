@@ -1,6 +1,7 @@
 export class Post {
   id?: number;
-  createAt: Date;
+  readonly createAt: Date;
+  author: string;
 
   constructor(
     public title: string,
@@ -8,6 +9,7 @@ export class Post {
     public userId: number,
     id?: number,
     createdAt?: Date,
+    author?: string,
   ) {
     if (id) this.id = id;
 
@@ -16,5 +18,7 @@ export class Post {
     } else {
       this.createAt = new Date();
     }
+
+    if (author) this.author = author;
   }
 }

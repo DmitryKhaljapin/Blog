@@ -4,6 +4,7 @@ import { Post } from '../post.entity';
 import { IPostService } from './post.service.interface';
 import { TYPES } from '../../types';
 import { IPostRepository } from '../repository/post.repository.interface';
+import e from 'express';
 
 @injectable()
 export class PostService implements IPostService {
@@ -32,6 +33,7 @@ export class PostService implements IPostService {
       existringPost.userId,
       existringPost.id,
       existringPost.createdAt,
+      existringPost.user.name,
     );
 
     return post;
@@ -48,6 +50,7 @@ export class PostService implements IPostService {
           existringPost.userId,
           existringPost.id,
           existringPost.createdAt,
+          existringPost.user.name,
         ),
     );
 

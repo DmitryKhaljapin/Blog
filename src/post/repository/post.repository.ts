@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { IPostRepository } from './post.repository.interface';
+import { IPost, IPostRepository } from './post.repository.interface';
 import { TYPES } from '../../types';
 import { PrismaService } from '../../database/prisma.service';
 import { PostModel } from '@prisma/client';
@@ -22,15 +22,24 @@ export class PostRepository implements IPostRepository {
     });
   }
 
-  public async getById(id: number): Promise<PostModel | null> {
+  public async getById(id: number): Promise<IPost | null> {
     return await this.prismaService.client.postModel.findFirst({
       where: {
         id,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 
-  public async getAll(): Promise<PostModel[]> {
-    return await this.prismaService.client.postModel.findMany();
+  public async getAll(): Promise<IPost[]> {
+    return await this.prismaService.client.postModel.findMany({
+      include: { user: { select: { name: true } } },
+    });
   }
 }
