@@ -17,6 +17,8 @@ import { ITokenRepository } from './token/repository/token.repository.interface'
 import { TokenRepository } from './token/repository/token.repository';
 import { ITokenService } from './token/service/token.service.interface';
 import { TokenService } from './token/service/token.service';
+import { IMailService } from './mail/mail.service.interface';
+import { MailService } from './mail/mail.service';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
@@ -33,6 +35,7 @@ export const appBindings = new ContainerModule(
       .to(TokenRepository)
       .inSingletonScope();
     options.bind<ITokenService>(TYPES.TokenService).to(TokenService);
+    options.bind<IMailService>(TYPES.MailService).to(MailService);
   },
 );
 
