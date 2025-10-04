@@ -15,6 +15,7 @@ model UserModel {
   isActivated    Boolean      @default(false)
   activationLink String
   TokenModel     TokenModel[]
+  PostModel PostModel[]
 }
 
 model TokenModel {
@@ -22,5 +23,15 @@ model TokenModel {
   refreshToken String     @unique
   userId       Int        @unique
   user         UserModel  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@index([userId])
+}
+
+model PostModel {
+  id Int @id @default(autoincrement())
+  title String
+  content String
+  createdAt DateTime
+  userId Int @unique
+  user UserModel  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@index([userId])
 }
