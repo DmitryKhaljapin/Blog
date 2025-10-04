@@ -16,7 +16,6 @@ export class UserController extends BaseController implements IUserController {
   constructor(
     @inject(TYPES.LoggerService) private loggerService: ILogger,
     @inject(TYPES.UserService) private userService: IUserService,
-    @inject(TYPES.ConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
 
