@@ -8,6 +8,7 @@ import { ILogger } from './logger/logger.service';
 import { TYPES } from './types';
 import { IConfigService } from './config/config.service.interface';
 import { IDatabaseService } from './database/database.service.interface';
+import { IUserController } from './user/controller/user.controller.intreface';
 
 @injectable()
 export class App {
@@ -19,6 +20,7 @@ export class App {
     @inject(TYPES.LoggerService) private logger: ILogger,
     @inject(TYPES.ConfigService) private configService: IConfigService,
     @inject(TYPES.PrismaService) private prismaService: IDatabaseService,
+    @inject(TYPES.UserController) private userController: IUserController,
   ) {
     this.app = express();
     this.port = Number(this.configService.get('PORT'));
@@ -30,7 +32,9 @@ export class App {
     this.app.use(cors());
   }
 
-  public useRoutes() {}
+  public useRoutes() {
+    this.app.use('/api', this.userController.router);
+  }
 
   public async usePrismaService() {
     await this.prismaService.connect();
