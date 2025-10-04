@@ -10,6 +10,7 @@ import { UserRegistrationDto } from '../dto/user-registration.dto';
 import { User } from '../user.entity';
 import { v4 } from 'uuid';
 import { UserLoginDto } from '../dto/user-login.dto';
+import { ITokens } from '../../common/tokens.interface';
 
 @injectable()
 export class UserService implements IUserService {
@@ -40,10 +41,15 @@ export class UserService implements IUserService {
 
     await this.mailService.sendActivationLink(newUser.email, activationLink);
 
+    await this.userRepository.create(newUser);
+
     return true;
   }
 
-  public async login({ email, password }: UserLoginDto): Promise<Token | null> {
+  public async login({
+    email,
+    password,
+  }: UserLoginDto): Promise<ITokens | null> {
     const existingUser = await this.userRepository.findByEmail(email);
 
     if (!existingUser) return null;
@@ -61,24 +67,23 @@ export class UserService implements IUserService {
     const tokens = this.tokenService.generateTokens({ email: user.email });
 
     const refreshToken = new Token(tokens.refreshToken, existingUser.id);
+    const result = await this.tokenService.saveToken(refreshToken);
 
-    await this.tokenService.saveToken(refreshToken);
+    if (!result) return null;
 
-    return refreshToken;
+    return tokens;
   }
 
-  public async logout(refreshToken: string): Promise<boolean> {
-    if (!refreshToken) return false;
+  public async logout(refreshToken: string): Promise<void> {
+    if (!refreshToken) return;
 
     const token = new Token(refreshToken);
 
     await this.tokenService.removeToken(token);
-
-    return true;
   }
 
   public async refresh(refreshToken: string): Promise<string | null> {
-    if (refreshToken) return null;
+    if (!refreshToken) return null;
 
     const tokenData = await this.tokenService.findToken(refreshToken);
 
@@ -91,11 +96,11 @@ export class UserService implements IUserService {
     );
 
     if (!isValidToken) return null;
-
+    console.log(2);
     const userData = await this.userRepository.findById(tokenData.userId);
 
     if (!userData) return null;
-
+    console.log(3);
     const accessToken = this.tokenService.generateAccessToken({
       email: userData.email,
     });
@@ -103,7 +108,7 @@ export class UserService implements IUserService {
     return accessToken;
   }
 
-  public async activate(activationLink: string): Promise<string | null> {
+  public async activate(activationLink: string): Promise<ITokens | null> {
     const userData =
       await this.userRepository.findByActivationLink(activationLink);
 
@@ -115,10 +120,12 @@ export class UserService implements IUserService {
 
     await this.userRepository.update(user);
 
-    const accessToken = this.tokenService.generateAccessToken({
-      email: user.email,
-    });
+    const tokens = this.tokenService.generateTokens({ email: user.email });
 
-    return accessToken;
+    const refreshToken = new Token(tokens.refreshToken, userData.id);
+
+    await this.tokenService.saveToken(refreshToken);
+
+    return tokens;
   }
 }
