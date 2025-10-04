@@ -1,5 +1,4 @@
 import { ITokens } from '../../common/tokens.interface';
-import { Token } from '../../token/token.entity';
 import { UserLoginDto } from '../dto/user-login.dto';
 import { UserRegistrationDto } from '../dto/user-registration.dto';
 

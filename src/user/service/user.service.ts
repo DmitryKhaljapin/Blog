@@ -96,11 +96,11 @@ export class UserService implements IUserService {
     );
 
     if (!isValidToken) return null;
-    console.log(2);
+
     const userData = await this.userRepository.findById(tokenData.userId);
 
     if (!userData) return null;
-    console.log(3);
+
     const accessToken = this.tokenService.generateAccessToken({
       email: userData.email,
     });
