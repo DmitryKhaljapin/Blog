@@ -4,6 +4,6 @@ export class UserLoginDto {
   @IsEmail({}, { message: 'Email is not valid' })
   email: string;
 
-  @IsString({ message: 'Passwod id missing' })
+  @IsString({ message: 'Passwod is missing' })
   password: string;
 }
