@@ -1,11 +1,12 @@
 import { JwtPayload, sign } from 'jsonwebtoken';
 import { Token } from '../token.entity';
-import { ITokens, ITokenService } from './token.service.interface';
+import { ITokenService } from './token.service.interface';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../types';
 import { IConfigService } from '../../config/config.service.interface';
 import { ITokenRepository } from '../repository/token.repository.interface';
 import { TokenModel } from '@prisma/client';
+import { ITokens } from '../../common/tokens.interface';
 
 injectable();
 export class TokenService implements ITokenService {
@@ -53,9 +54,9 @@ export class TokenService implements ITokenService {
   }
 
   public async saveToken(token: Token): Promise<boolean> {
-    const existingToken = await this.tokenRepository.findByRefreshToken(
-      token.refreshToken,
-    );
+    if (!token.userId) return false;
+
+    const existingToken = await this.tokenRepository.findByUserId(token.userId);
 
     if (existingToken) {
       await this.tokenRepository.update(token);

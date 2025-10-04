@@ -1,11 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { Token } from '../token.entity';
 import { TokenModel } from '@prisma/client';
-
-export interface ITokens {
-  accessToken: string;
-  refreshToken: string;
-}
+import { ITokens } from '../../common/tokens.interface';
 
 export interface ITokenService {
   generateTokens(payload: JwtPayload): ITokens;

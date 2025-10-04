@@ -6,6 +6,7 @@ export interface ITokenRepository {
   update(token: Token): Promise<boolean>;
 
   findByRefreshToken(refreshToken: string): Promise<TokenModel | null>;
+  findByUserId(userId: number): Promise<TokenModel | null>;
 
   remove(token: Token): Promise<void>;
 }

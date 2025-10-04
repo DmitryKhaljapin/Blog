@@ -49,6 +49,14 @@ export class TokenRepository implements ITokenRepository {
     });
   }
 
+  public async findByUserId(userId: number): Promise<TokenModel | null> {
+    return await this.prismaService.client.tokenModel.findFirst({
+      where: {
+        userId,
+      },
+    });
+  }
+
   public async remove(token: Token): Promise<void> {
     await this.prismaService.client.tokenModel.deleteMany({
       where: {

@@ -23,6 +23,7 @@ const TokenRepositoryMock: ITokenRepository = {
   update: jest.fn().mockResolvedValue(true),
 
   findByRefreshToken: jest.fn(),
+  findByUserId: jest.fn(),
 
   remove: jest.fn(),
 };
@@ -75,9 +76,7 @@ describe('Toke Service', () => {
 
   describe('saveToken', () => {
     it('updates token if it exists', async () => {
-      tokenRepository.findByRefreshToken = jest
-        .fn()
-        .mockReturnValue(mockTokenModel);
+      tokenRepository.findByUserId = jest.fn().mockReturnValue(mockTokenModel);
 
       const token = { refreshToken: 'refresh123', userId: 123 } as Token;
 
@@ -88,13 +87,10 @@ describe('Toke Service', () => {
     });
 
     it('creates token if it does not exist', async () => {
-      tokenRepository.findByRefreshToken = jest.fn().mockResolvedValue(null);
+      tokenRepository.findByUserId = jest.fn().mockResolvedValue(null);
 
       const result = await tokenService.saveToken(mockToken);
 
-      expect(tokenRepository.findByRefreshToken).toHaveBeenCalledWith(
-        mockToken,
-      );
       expect(tokenRepository.create).toHaveBeenCalledWith(mockToken);
       expect(result).toBe(true);
     });
