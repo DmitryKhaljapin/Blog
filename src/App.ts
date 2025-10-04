@@ -9,6 +9,7 @@ import { TYPES } from './types';
 import { IConfigService } from './config/config.service.interface';
 import { IDatabaseService } from './database/database.service.interface';
 import { IUserController } from './user/controller/user.controller.intreface';
+import { IPostController } from './post/controller/post.controller.interface';
 
 @injectable()
 export class App {
@@ -21,6 +22,7 @@ export class App {
     @inject(TYPES.ConfigService) private configService: IConfigService,
     @inject(TYPES.PrismaService) private prismaService: IDatabaseService,
     @inject(TYPES.UserController) private userController: IUserController,
+    @inject(TYPES.PostController) private postController: IPostController,
   ) {
     this.app = express();
     this.port = Number(this.configService.get('PORT'));
@@ -34,6 +36,7 @@ export class App {
 
   public useRoutes() {
     this.app.use('/api', this.userController.router);
+    this.app.use('/api/posts', this.postController.router);
   }
 
   public async usePrismaService() {

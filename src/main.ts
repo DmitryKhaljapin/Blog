@@ -27,6 +27,10 @@ import { IUserController } from './user/controller/user.controller.intreface';
 import { UserController } from './user/controller/user.controller';
 import { IPostRepository } from './post/repository/post.repository.interface';
 import { PostRepository } from './post/repository/post.repository';
+import { IPostService } from './post/service/post.service.interface';
+import { PostService } from './post/service/post.service';
+import { IPostController } from './post/controller/post.controller.interface';
+import { PostController } from './post/controller/post.controller';
 
 export const appBindings = new ContainerModule(
   (options: ContainerModuleLoadOptions) => {
@@ -54,6 +58,8 @@ export const appBindings = new ContainerModule(
       .bind<IPostRepository>(TYPES.PostRepository)
       .to(PostRepository)
       .inSingletonScope();
+    options.bind<IPostService>(TYPES.PostService).to(PostService);
+    options.bind<IPostController>(TYPES.PostController).to(PostController);
   },
 );
 

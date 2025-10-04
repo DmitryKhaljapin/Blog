@@ -31,7 +31,7 @@ model PostModel {
   title String
   content String
   createdAt DateTime
-  userId Int @unique
+  userId Int
   user UserModel  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@index([userId])
 }

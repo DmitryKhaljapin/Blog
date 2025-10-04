@@ -15,12 +15,10 @@ export class PostService implements IPostService {
     title,
     content,
     userId,
-  }: PostCreateDto): Promise<Post> {
+  }: PostCreateDto): Promise<void> {
     const newPost = new Post(title, content, userId);
 
-    const postData = await this.postRepository.create(newPost);
-
-    return newPost;
+    await this.postRepository.create(newPost);
   }
 
   public async findById(id: number): Promise<Post | null> {
