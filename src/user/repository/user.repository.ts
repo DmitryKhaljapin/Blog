@@ -32,6 +32,7 @@ export class UserRepository implements IUserRepository {
         name: user.name,
         password: user.password,
         activationLink: user.activationLink,
+        isActivated: user.isActivated,
       },
     });
   }
