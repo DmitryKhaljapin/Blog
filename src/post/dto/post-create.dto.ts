@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class PostCreateDto {
   @IsString({ message: 'title is missing' })
@@ -6,4 +6,7 @@ export class PostCreateDto {
 
   @IsString({ message: 'content is missing' })
   content: string;
+
+  @IsNumber({}, { message: 'user is not valid' })
+  userId: number;
 }

@@ -6,7 +6,15 @@ export class Post {
     public title: string,
     public content: string,
     public userId: number,
+    id?: number,
+    createdAt?: Date,
   ) {
-    this.createAt = new Date();
+    if (id) this.id = id;
+
+    if (createdAt) {
+      this.createAt = createdAt;
+    } else {
+      this.createAt = new Date();
+    }
   }
 }
