@@ -39,12 +39,20 @@ export class TokenRepository implements ITokenRepository {
     return true;
   }
 
-  public async findByRefreshToken({
-    refreshToken,
-  }: Token): Promise<TokenModel | null> {
+  public async findByRefreshToken(
+    refreshToken: string,
+  ): Promise<TokenModel | null> {
     return await this.prismaService.client.tokenModel.findFirst({
       where: {
         refreshToken,
+      },
+    });
+  }
+
+  public async findByUserId(userId: number): Promise<TokenModel | null> {
+    return await this.prismaService.client.tokenModel.findFirst({
+      where: {
+        userId,
       },
     });
   }
