@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "outDir": "./dist",
+    "rootDir": "./src",
     "removeComments": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -12,5 +13,6 @@
     "strict": true,
     "skipLibCheck": true,
     "strictPropertyInitialization": false
-  }
+  },
+  "include": ["src"]
 }

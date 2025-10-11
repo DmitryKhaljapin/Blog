@@ -1,0 +1,39 @@
+version: '3'
+services:
+  app:
+    image: blog
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: blog
+    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    container_name: database
+    restart: always
+    env_file:
+      - .env.local
+    volumes:
+      - ${PGDATA_VOLUME}:/data/db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+  migrate:
+    image: blog
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: migrate
+    depends_on:
+      - db
+    environment:
+      DB_URI: ${DB_URI}
+    command: ['npx', 'prisma', 'migrate', 'deploy']
+    restart: 'no'

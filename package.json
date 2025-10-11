@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
+    "app": "dotenv -e .env.prod -- node ./dist/main.js",
     "generate": "prisma generate",
     "build": "tsc",
     "lint": "eslint ./src/**",
@@ -51,6 +52,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
+    "dotenv-cli": "^10.0.0",
     "express": "^5.1.0",
     "inversify": "^7.9.1",
     "jsonwebtoken": "^9.0.2",
