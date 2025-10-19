@@ -17,3 +17,4 @@ jobs:
           registry: ghcr.io
           dockerfile: docker/Dockerfile
           workdir: .
+          tags: dev
