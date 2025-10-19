@@ -1,0 +1,20 @@
+name: Publish Docker
+
+on:
+  push:
+    branch: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Publish to regestry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: ghcr.io/dmitrykhaljapin/blog
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          dockerfile: docker/Dockerfile
+          workdir: .
+          tags: dev
