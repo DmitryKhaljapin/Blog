@@ -11,7 +11,7 @@ jobs:
       - name: Publish to regestry
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: ghcr.io/${{ github.repository_owner }}/blog
+          name: ghcr.io/${{ github.repository_owner }}/Blog
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
           registry: ghcr.io
