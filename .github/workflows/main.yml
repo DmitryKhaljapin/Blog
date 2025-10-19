@@ -13,7 +13,7 @@ jobs:
         with:
           name: ghcr.io/${{ github.repository_owner }}/blog
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_PAT }}
           registry: ghcr.io
           dockerfile: docker/Dockerfile
           workdir: .
