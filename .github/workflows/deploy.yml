@@ -1,0 +1,31 @@
+name: Deploy to Dev
+
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to dev
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.DEV_IP }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          script: |
+            OWNER_LC=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+            IMAGE="ghcr.io/${OWNER_LC}/blog:dev"
+
+            echo "Login to GHCR"
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GHCR_PAT }}
+
+            echo "Pull the container $IMAGE"
+            docker pull $IMAGE
+
+            echo "Rerun the container"
+            docker stop blog || true
+            docker rm blog || true
+            docker run -d --name blog -p 3000:3000 -v "/etc:/opt/app" $IMAGE
+
+            echo "Run migrations"
+            docker exec blog npx prisma migrate deploy
