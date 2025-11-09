@@ -9,7 +9,9 @@ export class ConfigService implements IConfigService {
   private config: DotenvParseOutput;
 
   constructor(@inject(TYPES.LoggerService) private logger: ILogger) {
-    const result: DotenvConfigOutput = config();
+    const result: DotenvConfigOutput = config({
+      path: process.env.ENV_PATH || './.env',
+    });
 
     if (result.error) {
       this.logger.error('[ConfigService] File .env is missing or not valid');
