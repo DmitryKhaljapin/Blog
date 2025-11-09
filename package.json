@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "app": "dotenv -e .env.prod -- node ./dist/main.js",
+    "app": "dotenv -e ./config/.env.prod -- node ./dist/main.js",
     "generate": "prisma generate",
     "build": "tsc",
     "lint": "eslint ./src/**",
