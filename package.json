@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "app": "dotenv -e ./config/.env.prod -- node ./dist/main.js",
+    "app": "dotenv -f ./config/.env.prod -- node ./dist/main.js",
     "generate": "prisma generate",
     "build": "tsc",
     "lint": "eslint ./src/**",
@@ -42,6 +42,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^6.16.1",
     "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",

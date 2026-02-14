@@ -1,13 +1,16 @@
-version: '3'
+version: '3.8'
 services:
   db:
     image: postgres
     container_name: localdb
     restart: always
     volumes:
-      - ./dump/:/data/db
+      - db_vol:/data/db
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: super_coole_blog_db
+      POSTGRES_PASSWORD: super_cool_blog_db
       POSTGRES_DB: blog
+
+volumes:
+  db_vol:

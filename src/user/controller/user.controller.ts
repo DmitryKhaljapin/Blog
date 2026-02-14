@@ -4,7 +4,6 @@ import { IUserController } from './user.controller.intreface';
 import { TYPES } from '../../types';
 import { ILogger } from '../../logger/logger.service';
 import { IUserService } from '../service/user.service.intarface';
-import { IConfigService } from '../../config/config.service.interface';
 import { ValidateMiddleware } from '../../common/validate.middleware';
 import { UserRegistrationDto } from '../dto/user-registration.dto';
 import { UserLoginDto } from '../dto/user-login.dto';
@@ -67,8 +66,8 @@ export class UserController extends BaseController implements IUserController {
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    const activateLink = params.link;
-    console.log(activateLink);
+    const activateLink = params.link as string;
+
     const tokens = await this.userService.activate(activateLink);
 
     if (!tokens) return next(new HTTPError(422, 'Invalid link'));
@@ -104,6 +103,10 @@ export class UserController extends BaseController implements IUserController {
     next: NextFunction,
   ): Promise<void> {
     const refreshToken = cookies['refreshToken'];
+
+    if (!refreshToken) {
+      return next(new HTTPError(401, 'No refresh token'));
+    }
 
     this.userService.logout(refreshToken);
 

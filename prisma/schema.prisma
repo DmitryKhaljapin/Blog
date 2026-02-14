@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -16,6 +17,7 @@ model UserModel {
   activationLink String
   TokenModel     TokenModel[]
   PostModel PostModel[]
+  CommentModel CommentModel[]
 }
 
 model TokenModel {
@@ -34,4 +36,17 @@ model PostModel {
   userId Int
   user UserModel  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   @@index([userId])
+  CommentModel CommentModel[]
+}
+
+model CommentModel {
+  id Int @id @default(autoincrement())
+  text String
+  createdAt DateTime
+  userId Int
+  postId Int
+  user UserModel  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@index([userId])
+  post PostModel  @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  @@index([postId])
 }

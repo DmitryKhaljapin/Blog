@@ -10,7 +10,7 @@ export class ConfigService implements IConfigService {
 
   constructor(@inject(TYPES.LoggerService) private logger: ILogger) {
     const result: DotenvConfigOutput = config({
-      path: process.env.ENV_PATH || './.env',
+      path: process.env.ENV_PATH || '.env',
     });
 
     if (result.error) {

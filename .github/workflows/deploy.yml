@@ -25,7 +25,7 @@ jobs:
             echo "Rerun the container"
             docker stop blog || true
             docker rm blog || true
-            docker run -d --name blog -p 3000:3000 -v "/etc:/opt/app" $IMAGE
+             docker run --name blog -p 3000:3000 -v "/etc/app_config:/opt/app/config" -e ENV_PATH=/opt/app/config/.env.prod $IMAGE
 
             echo "Run migrations"
             docker exec blog npx prisma migrate deploy
