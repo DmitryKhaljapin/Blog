@@ -16,6 +16,7 @@ export class App {
   app: Express;
   server: Server;
   port: number;
+  hostname: string;
 
   constructor(
     @inject(TYPES.LoggerService) private logger: ILogger,
@@ -26,6 +27,7 @@ export class App {
   ) {
     this.app = express();
     this.port = Number(this.configService.get('PORT'));
+    this.hostname = this.configService.get('HOST') ?? '127.0.0.1';
   }
 
   public useMiddleware() {
@@ -49,8 +51,10 @@ export class App {
 
     this.usePrismaService();
 
-    this.server = this.app.listen(this.port);
+    this.server = this.app.listen(this.port, this.hostname);
 
-    this.logger.log(`The server has stated on the port ${this.port}`);
+    this.logger.log(
+      `The server has stated on the ${this.hostname}:${this.port}`,
+    );
   }
 }
